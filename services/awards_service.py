@@ -93,7 +93,7 @@ def scrape_variety_awards() -> list[dict]:
         response = requests.get("https://variety.com/v/awards/", headers=headers, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         articles = []
 
         for card in soup.select("article, .c-card, .o-card")[:10]:
@@ -142,7 +142,7 @@ def scrape_hollywood_reporter() -> list[dict]:
         response = requests.get("https://www.hollywoodreporter.com/t/awards/", headers=headers, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         articles = []
 
         for card in soup.select("article, .lrv-u-flex, .c-card")[:10]:
@@ -195,7 +195,7 @@ def scrape_deadline() -> list[dict]:
         response = requests.get("https://deadline.com/category/awards/", headers=headers, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         articles = []
 
         for card in soup.select("article, .c-card")[:10]:
@@ -244,7 +244,7 @@ def scrape_ew_awards() -> list[dict]:
         response = requests.get("https://ew.com/awards/", headers=headers, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         articles = []
 
         for card in soup.select("article, .card, .mntl-card")[:10]:
@@ -293,7 +293,7 @@ def scrape_indiewire() -> list[dict]:
         response = requests.get("https://www.indiewire.com/c/awards/", headers=headers, timeout=10)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         articles = []
 
         for card in soup.select("article, .c-card")[:10]:
