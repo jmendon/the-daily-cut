@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-dark-bg text-gray-100;
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .feed-card {
+    @apply bg-dark-card rounded-xl overflow-hidden border border-dark-border
+           transition-all duration-200 hover:border-gray-600 hover:shadow-lg;
+  }
+
+  .feed-card-image {
+    @apply w-full aspect-video object-cover;
+  }
+
+  .feed-card-content {
+    @apply p-4;
+  }
+
+  .tag {
+    @apply inline-block px-2 py-1 text-xs font-medium rounded-full;
+  }
+
+  .tag-podcast {
+    @apply bg-purple-900/50 text-purple-300;
+  }
+
+  .tag-interview {
+    @apply bg-blue-900/50 text-blue-300;
+  }
+
+  .tag-awards {
+    @apply bg-yellow-900/50 text-yellow-300;
+  }
+
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-hover text-white font-medium
+           px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+
+  .input-field {
+    @apply w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3
+           text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-500
+           transition-colors duration-200;
+  }
+
+  .toggle {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full
+           transition-colors duration-200 focus:outline-none;
+  }
+
+  .toggle-enabled {
+    @apply bg-accent;
+  }
+
+  .toggle-disabled {
+    @apply bg-gray-600;
+  }
+
+  .toggle-knob {
+    @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}

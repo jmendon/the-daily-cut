@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - The Daily Cut{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <header class="text-center py-4">
+        <h1 class="font-display text-3xl font-bold text-white">Settings</h1>
+        <p class="text-gray-400 mt-2">Customize your daily entertainment feed</p>
+    </header>
+
+    <form id="settings-form" class="space-y-5">
+        <!-- Interests Section -->
+        <section class="bg-gradient-to-br from-blue-900/20 to-blue-900/5 rounded-2xl p-5 border border-blue-800/30">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="font-semibold text-lg text-white">Interests</h2>
+                    <p class="text-sm text-gray-400">Shows, actors, or topics to follow</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex gap-2">
+                    <input type="text" id="interest-input" placeholder="e.g., Timothée Chalamet, The Bear"
+                           class="flex-1 bg-dark-bg/50 border border-blue-800/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors">
+                    <button type="button" id="add-interest" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-3 rounded-xl transition-colors">Add</button>
+                </div>
+                <div id="interests-list" class="flex flex-wrap gap-2"></div>
+            </div>
+        </section>
+
+        <!-- Blocked Topics Section -->
+        <section class="bg-gradient-to-br from-red-900/20 to-red-900/5 rounded-2xl p-5 border border-red-800/30">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="font-semibold text-lg text-white">Blocked Topics</h2>
+                    <p class="text-sm text-gray-400">Filter out unwanted content</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex gap-2">
+                    <input type="text" id="blocked-input" placeholder="e.g., spoilers, politics"
+                           class="flex-1 bg-dark-bg/50 border border-red-800/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors">
+                    <button type="button" id="add-blocked" class="bg-red-600 hover:bg-red-500 text-white font-medium px-5 py-3 rounded-xl transition-colors">Add</button>
+                </div>
+                <div id="blocked-list" class="flex flex-wrap gap-2"></div>
+            </div>
+        </section>
+
+        <!-- Award Season Mode -->
+        <section class="bg-gradient-to-br from-yellow-900/20 to-amber-900/5 rounded-2xl p-5 border border-yellow-700/30">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-yellow-600 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="font-semibold text-lg text-white">Award Season Mode</h2>
+                        <p class="text-sm text-gray-400">Golden Globes, Oscars, Emmys & more</p>
+                    </div>
+                </div>
+                <button type="button" id="award-toggle"
+                        class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-200 focus:outline-none bg-gray-600"
+                        role="switch"
+                        aria-checked="false">
+                    <span class="inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-200 translate-x-1"></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Podcast Sources -->
+        <section class="bg-gradient-to-br from-purple-900/20 to-purple-900/5 rounded-2xl p-5 border border-purple-800/30">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="font-semibold text-lg text-white">Podcast Sources</h2>
+                    <p class="text-sm text-gray-400">Tracking new episodes</p>
+                </div>
+            </div>
+
+            <ul class="space-y-3">
+                <li class="flex items-center gap-3 bg-dark-bg/30 rounded-xl px-4 py-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-white flex-1">SmartLess</span>
+                    <span class="text-green-400 text-xs">Spotify</span>
+                </li>
+                <li class="flex items-center gap-3 bg-dark-bg/30 rounded-xl px-4 py-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-white flex-1">Conan O'Brien Needs a Friend</span>
+                    <span class="text-green-400 text-xs">Spotify</span>
+                </li>
+                <li class="flex items-center gap-3 bg-dark-bg/30 rounded-xl px-4 py-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-white flex-1">Armchair Expert</span>
+                    <span class="text-green-400 text-xs">Spotify</span>
+                </li>
+                <li class="flex items-center gap-3 bg-dark-bg/30 rounded-xl px-4 py-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                    <span class="text-white flex-1">Good Hang with Amy Poehler</span>
+                    <span class="text-red-400 text-xs">YouTube</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Save Button -->
+        <button type="submit" class="w-full bg-gradient-to-r from-accent to-red-700 hover:from-accent-hover hover:to-red-600 text-white font-semibold py-4 rounded-2xl transition-all shadow-lg shadow-red-900/30">
+            Save Settings
+        </button>
+    </form>
+
+    <!-- Toast notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg
+                          transform transition-all duration-300 opacity-0 translate-y-4 pointer-events-none font-medium">
+        Settings saved!
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let settings = {
+    interests: [],
+    blocked: [],
+    awardMode: false
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('/api/settings');
+        settings = await response.json();
+    } catch (e) {
+        console.log('No existing settings found');
+    }
+
+    renderInterests();
+    renderBlocked();
+    updateToggle();
+});
+
+// Interests handling
+document.getElementById('add-interest').addEventListener('click', () => {
+    const input = document.getElementById('interest-input');
+    const value = input.value.trim();
+    if (value && !settings.interests.includes(value)) {
+        settings.interests.push(value);
+        renderInterests();
+        input.value = '';
+    }
+});
+
+document.getElementById('interest-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('add-interest').click();
+    }
+});
+
+function renderInterests() {
+    const list = document.getElementById('interests-list');
+    list.innerHTML = settings.interests.map((interest, i) => `
+        <span class="inline-flex items-center gap-2 bg-blue-600/30 text-blue-200 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30">
+            ${escapeHtml(interest)}
+            <button type="button" onclick="removeInterest(${i})" class="hover:text-white transition-colors">&times;</button>
+        </span>
+    `).join('');
+}
+
+function removeInterest(index) {
+    settings.interests.splice(index, 1);
+    renderInterests();
+}
+
+// Blocked topics handling
+document.getElementById('add-blocked').addEventListener('click', () => {
+    const input = document.getElementById('blocked-input');
+    const value = input.value.trim();
+    if (value && !settings.blocked.includes(value)) {
+        settings.blocked.push(value);
+        renderBlocked();
+        input.value = '';
+    }
+});
+
+document.getElementById('blocked-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('add-blocked').click();
+    }
+});
+
+function renderBlocked() {
+    const list = document.getElementById('blocked-list');
+    list.innerHTML = settings.blocked.map((topic, i) => `
+        <span class="inline-flex items-center gap-2 bg-red-600/30 text-red-200 px-4 py-2 rounded-full text-sm font-medium border border-red-500/30">
+            ${escapeHtml(topic)}
+            <button type="button" onclick="removeBlocked(${i})" class="hover:text-white transition-colors">&times;</button>
+        </span>
+    `).join('');
+}
+
+function removeBlocked(index) {
+    settings.blocked.splice(index, 1);
+    renderBlocked();
+}
+
+// Award mode toggle
+document.getElementById('award-toggle').addEventListener('click', () => {
+    settings.awardMode = !settings.awardMode;
+    updateToggle();
+});
+
+function updateToggle() {
+    const toggle = document.getElementById('award-toggle');
+    const knob = toggle.querySelector('span');
+
+    if (settings.awardMode) {
+        toggle.classList.remove('bg-gray-600');
+        toggle.classList.add('bg-yellow-600');
+        toggle.setAttribute('aria-checked', 'true');
+        knob.classList.remove('translate-x-1');
+        knob.classList.add('translate-x-6');
+    } else {
+        toggle.classList.remove('bg-yellow-600');
+        toggle.classList.add('bg-gray-600');
+        toggle.setAttribute('aria-checked', 'false');
+        knob.classList.remove('translate-x-6');
+        knob.classList.add('translate-x-1');
+    }
+}
+
+// Save settings
+document.getElementById('settings-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    try {
+        await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settings)
+        });
+
+        showToast('Settings saved!');
+    } catch (error) {
+        showToast('Failed to save settings', true);
+    }
+});
+
+function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = toast.className.replace(/bg-(green|red)-600/, isError ? 'bg-red-600' : 'bg-green-600');
+    toast.classList.remove('opacity-0', 'translate-y-4');
+
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4');
+    }, 2500);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+{% endblock %}
