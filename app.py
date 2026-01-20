@@ -140,7 +140,7 @@ def get_feed():
 
     # 1. Fetch recent podcast episodes (always on)
     try:
-        episodes = fetch_recent_episodes(hours=48)
+        episodes = fetch_recent_episodes(hours=24)
         episodes = filter_blocked_content(episodes, blocked_topics)
 
         # Add LLM summaries
@@ -154,7 +154,7 @@ def get_feed():
         try:
             interviews = search_interviews(
                 interests=interests,
-                hours=48,
+                hours=24,
                 blocked_topics=blocked_topics
             )
             all_items.extend(interviews)
@@ -189,7 +189,7 @@ def get_podcasts():
     settings = load_settings()
     blocked_topics = settings.get("blocked", [])
 
-    episodes = fetch_recent_episodes(hours=48)
+    episodes = fetch_recent_episodes(hours=24)
     episodes = filter_blocked_content(episodes, blocked_topics)
     episodes = batch_summarize_episodes(episodes)
 
@@ -208,7 +208,7 @@ def get_interviews():
 
     interviews = search_interviews(
         interests=interests,
-        hours=48,
+        hours=24,
         blocked_topics=blocked_topics
     )
 
@@ -282,7 +282,7 @@ def send_digest_email():
 
         # Fetch all content (same logic as /api/feed)
         try:
-            episodes = fetch_recent_episodes(hours=48)
+            episodes = fetch_recent_episodes(hours=24)
             episodes = filter_blocked_content(episodes, blocked_topics)
             episodes = batch_summarize_episodes(episodes)
             all_items.extend(episodes)
@@ -293,7 +293,7 @@ def send_digest_email():
             try:
                 interviews = search_interviews(
                     interests=interests,
-                    hours=48,
+                    hours=24,
                     blocked_topics=blocked_topics
                 )
                 all_items.extend(interviews)

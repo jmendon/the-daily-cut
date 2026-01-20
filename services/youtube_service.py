@@ -279,12 +279,8 @@ def search_interviews(interests: list[str], hours: int = 48, blocked_topics: lis
         # Build optimized search query
         query = get_search_query(interest)
 
-        # Try API first
+        # Use API only - scraping assigns fake timestamps which causes old videos to appear
         videos = search_youtube_api(query, max_results=8, published_after=published_after)
-
-        # Fallback to scraping if API returns nothing
-        if not videos:
-            videos = scrape_youtube_search(f"{query} 2025", max_results=8)
 
         for video in videos:
             url = video.get("url", "")
