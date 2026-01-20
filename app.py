@@ -256,7 +256,7 @@ def get_award_countdown():
     })
 
 
-@app.route("/api/send-digest", methods=["POST"])
+@app.route("/api/send-digest", methods=["GET", "POST"])
 def send_digest_email():
     """Send the daily digest email now. Requires CRON_SECRET for authentication."""
     # Verify cron secret for automated requests
