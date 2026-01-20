@@ -259,6 +259,8 @@ def get_award_countdown():
 @app.route("/api/send-digest", methods=["GET", "POST"])
 def send_digest_email():
     """Send the daily digest email now. Requires CRON_SECRET for authentication."""
+    import traceback
+
     # Verify cron secret for automated requests
     cron_secret = os.environ.get("CRON_SECRET")
     provided_secret = request.headers.get("X-Cron-Secret") or request.args.get("secret")
@@ -269,51 +271,63 @@ def send_digest_email():
     if provided_secret != cron_secret:
         return jsonify({"error": "Unauthorized"}), 401
 
-    settings = load_settings()
-    blocked_topics = settings.get("blocked", [])
-    interests = settings.get("interests", [])
-    award_mode = settings.get("awardMode", False)
-
-    all_items = []
-
-    # Fetch all content (same logic as /api/feed)
     try:
-        episodes = fetch_recent_episodes(hours=48)
-        episodes = filter_blocked_content(episodes, blocked_topics)
-        episodes = batch_summarize_episodes(episodes)
-        all_items.extend(episodes)
+        settings = load_settings()
+        blocked_topics = settings.get("blocked", [])
+        interests = settings.get("interests", [])
+        award_mode = settings.get("awardMode", False)
+
+        all_items = []
+        errors = []
+
+        # Fetch all content (same logic as /api/feed)
+        try:
+            episodes = fetch_recent_episodes(hours=48)
+            episodes = filter_blocked_content(episodes, blocked_topics)
+            episodes = batch_summarize_episodes(episodes)
+            all_items.extend(episodes)
+        except Exception as e:
+            errors.append(f"Podcasts: {str(e)}")
+
+        if interests:
+            try:
+                interviews = search_interviews(
+                    interests=interests,
+                    hours=48,
+                    blocked_topics=blocked_topics
+                )
+                all_items.extend(interviews)
+            except Exception as e:
+                errors.append(f"Interviews: {str(e)}")
+
+        if award_mode:
+            try:
+                headlines = fetch_award_headlines()
+                headlines = filter_blocked_content(headlines, blocked_topics)
+                all_items.extend(headlines)
+            except Exception as e:
+                errors.append(f"Awards: {str(e)}")
+
+        # Sort by date
+        all_items.sort(key=lambda x: x.get("published", ""), reverse=True)
+
+        # Send the email
+        result = send_daily_digest(all_items)
+
+        # Include any content fetch errors in response
+        if errors:
+            result["content_errors"] = errors
+
+        if result.get("success"):
+            return jsonify(result)
+        else:
+            return jsonify(result), 500
+
     except Exception as e:
-        print(f"Error fetching podcasts for email: {e}")
-
-    if interests:
-        try:
-            interviews = search_interviews(
-                interests=interests,
-                hours=48,
-                blocked_topics=blocked_topics
-            )
-            all_items.extend(interviews)
-        except Exception as e:
-            print(f"Error fetching interviews for email: {e}")
-
-    if award_mode:
-        try:
-            headlines = fetch_award_headlines()
-            headlines = filter_blocked_content(headlines, blocked_topics)
-            all_items.extend(headlines)
-        except Exception as e:
-            print(f"Error fetching awards for email: {e}")
-
-    # Sort by date
-    all_items.sort(key=lambda x: x.get("published", ""), reverse=True)
-
-    # Send the email
-    result = send_daily_digest(all_items)
-
-    if result["success"]:
-        return jsonify(result)
-    else:
-        return jsonify(result), 500
+        return jsonify({
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }), 500
 
 
 # ==================== Error Handlers ====================
